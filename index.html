@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Oksicoin Deluxe</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script type="module" src="./js/main.js"></script>
+</head>
+<body>
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-card">
+      <div class="brand">OKSICOIN</div>
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Загрузка...</div>
+    </div>
+  </div>
+
+  <div id="auth-screen" class="auth-screen hidden-auth">
+    <div class="auth-card">
+      <div class="brand">OKSICOIN</div>
+      <p class="auth-subtitle">Добро пожаловать в OKSICOIN - лучшая платформа для окситапа.</p>
+      <input type="text" id="nickname-input" placeholder="Введи свой никнейм" maxlength="18" />
+      <button class="primary-btn" id="register-btn">ПОГНАЛИ</button>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="topbar-label">Игрок</div>
+        <div id="display-name" class="player-name">...</div>
+        <div id="telegram-username" class="telegram-username"></div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="gift-btn" id="daily-reward-btn" aria-label="Ежедневная награда">
+          <span class="gift-icon">🎁</span>
+          <span class="gift-dot" id="gift-dot"></span>
+        </button>
+        <div class="version-badge">V5.0</div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <section id="screen-game" class="screen active">
+        <div class="brand hero-brand">OKSICOIN</div>
+        <div id="counter" class="counter">0</div>
+        <div class="counter-subtitle">Тапай, качайся, стань окси-китом</div>
+        <div id="next-skin-text" class="telegram-username" style="text-align:center; margin-top:8px;"></div>
+
+        <div class="coin-wrap">
+          <button class="coin" id="coin-btn" aria-label="Собрать Oksicoin"></button>
+        </div>
+
+        <div class="status-panel">
+          <div class="status-row">
+            <span>⚡ ЭНЕРГИЯ</span>
+            <span id="energy-text">1000 / 1000</span>
+          </div>
+          <div class="bar-bg">
+            <div id="energy-fill" class="bar-fill"></div>
+          </div>
+        </div>
+
+        <div id="admin-tools" style="display:none; margin-top:14px; width:100%;">
+          <button id="admin-add-coins-btn" class="primary-btn" style="width:100%;">+5000 TEST COINS</button>
+        </div>
+      </section>
+
+      <section id="screen-upgrades" class="screen">
+        <div class="section-head">
+          <h2>Бусты</h2>
+          <p>Прокачивай себя и свое умение окситапа</p>
+        </div>
+        <div id="upgrades-list" class="upgrades-list"></div>
+      </section>
+
+      <section id="screen-shop" class="screen">
+        <div class="section-head">
+          <h2>Магазин</h2>
+          <p>Покупай бусты и кейсы за монеты</p>
+        </div>
+
+        <div class="inventory-tabs" id="shop-tabs">
+          <button class="inventory-tab active-inventory-tab" data-shop-tab="boosts">Бусты</button>
+          <button class="inventory-tab" data-shop-tab="cases">Кейсы</button>
+        </div>
+
+        <div id="shop-content"></div>
+      </section>
+
+      <section id="screen-inventory" class="screen">
+        <div class="section-head">
+          <h2>Инвентарь</h2>
+          <p>Активируй, открывай, надевай и меняй предметы</p>
+        </div>
+
+        <div class="inventory-summary">
+          <div class="inventory-summary-card">
+            <span>Бафы</span>
+            <strong id="active-buffs-count">0 / 3</strong>
+          </div>
+          <div class="inventory-summary-card">
+            <span>Петы</span>
+            <strong id="active-pets-count">0 / 3</strong>
+          </div>
+          <div class="inventory-summary-card">
+            <span>Аксессуар</span>
+            <strong id="active-accessories-count">0 / 1</strong>
+          </div>
+        </div>
+
+        <div class="inventory-tabs" id="inventory-tabs">
+          <button class="inventory-tab active-inventory-tab" data-inventory-tab="cases">Кейсы</button>
+          <button class="inventory-tab" data-inventory-tab="buffs">Бафы</button>
+          <button class="inventory-tab" data-inventory-tab="pets">Петы</button>
+          <button class="inventory-tab" data-inventory-tab="accessories">Аксессуары</button>
+        </div>
+
+        <div id="inventory-content"></div>
+      </section>
+
+      <section id="screen-stats" class="screen">
+        <div class="section-head">
+          <h2>Окси-Киты 🐳</h2>
+          <p>Лучшие игроки по добытым монетам</p>
+        </div>
+        <div id="leaderboard-list" class="leaderboard-list"></div>
+      </section>
+    </main>
+
+    <nav class="nav nav-five">
+      <button class="nav-item active-nav" data-screen="game">
+        <span class="nav-icon">🪙</span>
+        <span>Главная</span>
+      </button>
+      <button class="nav-item" data-screen="upgrades">
+        <span class="nav-icon">🚀</span>
+        <span>Бусты</span>
+      </button>
+      <button class="nav-item" data-screen="shop">
+        <span class="nav-icon">🛒</span>
+        <span>Магазин</span>
+      </button>
+      <button class="nav-item" data-screen="inventory">
+        <span class="nav-icon">🎒</span>
+        <span>Инвентарь</span>
+      </button>
+      <button class="nav-item" data-screen="stats">
+        <span class="nav-icon">🏆</span>
+        <span>Топ</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="modal-backdrop hidden" id="daily-modal">
+    <div class="modal-card">
+      <button class="modal-close" id="daily-modal-close" aria-label="Закрыть">✕</button>
+
+      <div class="modal-head">
+        <h3>Ежедневная награда</h3>
+        <p>Заходи каждый день и собирай deluxe-серию из 15 бонусов</p>
+      </div>
+
+      <div class="daily-summary">
+        <div class="daily-summary-item">
+          <span>Серия</span>
+          <strong id="daily-streak-text">0 дней</strong>
+        </div>
+        <div class="daily-summary-item">
+          <span>Статус</span>
+          <strong id="daily-status-text">...</strong>
+        </div>
+      </div>
+
+      <div id="daily-grid" class="daily-grid"></div>
+
+      <div class="daily-footer">
+        <div id="daily-timer" class="daily-timer">Следующая награда скоро</div>
+        <button class="primary-btn" id="claim-daily-btn">ЗАБРАТЬ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="afk-modal" class="afk-modal hidden">
+    <div class="afk-card">
+      <div class="afk-title">AFK доход</div>
+      <div class="afk-amount" id="afk-earned">+0</div>
+      <div class="afk-desc" id="afk-duration">Пока тебя не было, майнер продолжал работать.</div>
+      <button class="primary-btn" id="afk-close-btn">ЗАБРАТЬ</button>
+    </div>
+  </div>
+
+  <div id="case-modal" class="case-modal hidden">
+    <div class="case-modal-card">
+      <div class="case-modal-head">
+        <div>
+          <div class="case-modal-title">Открытие кейса</div>
+          <div class="case-modal-subtitle" id="case-modal-subtitle">Лента наград крутится...</div>
+        </div>
+        <button class="modal-close" id="case-modal-close" aria-label="Закрыть">✕</button>
+      </div>
+
+      <div class="case-reel-wrap">
+        <div class="case-reel-pointer"></div>
+        <div id="case-reel" class="case-reel"></div>
+      </div>
+
+      <div id="case-result" class="case-result hidden">
+        <div class="case-result-label">Тебе выпало</div>
+        <div id="case-result-name" class="case-result-name"></div>
+        <div id="case-result-desc" class="case-result-desc"></div>
+        <button class="primary-btn" id="case-claim-btn">ЗАБРАТЬ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="case-info-modal" class="modal-backdrop hidden">
+    <div class="modal-card case-info-card">
+      <button class="modal-close" id="case-info-close" aria-label="Закрыть">✕</button>
+
+      <div class="modal-head">
+        <h3 id="case-info-title">Содержимое кейса</h3>
+        <p id="case-info-price">Цена: 0 💰</p>
+      </div>
+
+      <div id="case-info-desc" class="case-info-desc"></div>
+      <div id="case-info-odds" class="case-info-odds"></div>
+    </div>
+  </div>
+</body>
+</html>
